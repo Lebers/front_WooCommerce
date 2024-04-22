@@ -1,0 +1,16 @@
+
+erp_system/__pycache__/
+/usuario/__pycache__
+/usuario/migrations/__pycache__
+/productos/__pycache__
+/productos/migrations/__pycache__
+/pedidos/__pycache__
+/authentication/__pycache__
+/authentication/migrations/__pycache__
+/clientes/__pycache__
+/clientes/migrations/__pycache__
+/dashboard/__pycache__
+/dashboard/migrations/__pycache__
+/main/__pycache__
+/main/migrations/__pycache__
+/pedidos/migrations/__pycache__
