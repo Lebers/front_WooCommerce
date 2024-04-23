@@ -93,7 +93,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOW_ALL_ORIGINS = True  
 
-API_URL = os.getenv('API_URL', 'http://192.168.0.172:8004')
+API_URL = os.getenv('API_URL', 'http://inventario.99degrees.tech/')
 
 LOGIN_URL = '/login'
 
