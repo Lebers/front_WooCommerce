@@ -12,6 +12,11 @@ urlpatterns = [
     path('api_proxy/', api_proxy),
     path('api_login', api_login),
     path('inicio/', views.incio, name='inicio'),
+    path('inicio2/', views.incio2, name='inicio2'),
+    path('listUsers/', views.listUsers, name='listUsers'),
+    path('listWere/', views.listWere, name='listWere'),
+    path('listProducts/', views.listProducts, name='listProducts'),
+    path('newWereHouse/', views.newWereHouse, name='newWereHouse'),
 
     path('', include('main.urls')),
 
@@ -21,4 +26,4 @@ urlpatterns = [
     path('usuario/', include('usuario.urls')),
     path('pedidos/', include('pedidos.urls')),
    
-]
+] 
