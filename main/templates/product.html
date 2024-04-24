@@ -11,9 +11,13 @@
         .text-zinc-800 { color: #243447; }
         .text-zinc-900 { color: #102a43; }
     </style>
+    <link rel="stylesheet" href="{% static 'main/css/loader.css' %}" />
          
 </head>
 <body class="bg-zinc-100 p-4 font-sans">
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+      </div>
     <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow">
         <h1 class="text-xl font-bold mb-4">Nuevo producto</h1>
          
@@ -59,7 +63,8 @@
         </div>
     </div>
     
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="{% static 'main/js/loaders.js' %}"></script>
     <script>
         $(document).ready(function(){
             $('#upload-btn').click(function(event){
