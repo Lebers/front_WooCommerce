@@ -38,7 +38,10 @@
         <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
           <ul class="navbar-nav navbar-nav-right">
              
-            <li class="nav-item dropdown  d-flex">
+            <!--
+
+            
+            <li class="nav-item dropdown  d-flex ">
               <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-toggle="dropdown">
                 <i class="typcn typcn-bell mr-0"></i>
                 <span class="count bg-danger">2</span>
@@ -86,16 +89,18 @@
                 </a>
               </div>
             </li>
+-->
+
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle  pl-0 pr-0" href="#" data-toggle="dropdown" id="profileDropdown">
                 <i class="typcn typcn-user-outline mr-0"></i>
                 
               </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                <a class="dropdown-item">
+                <!-- <a class="dropdown-item">
                     <i class="typcn typcn-cog text-primary"></i>
                     Settings
-                </a>
+                </a>-->
                 <a class="dropdown-item">
                     <i class="typcn typcn-power text-primary"></i>
                     <span>
@@ -166,20 +171,19 @@
                 var menu_html = '<li class="nav-item">';
                     menu_html += '<div class="d-flex sidebar-profile">';
                         menu_html += '<div class="sidebar-profile-image">';
-                            menu_html += '<img src="/static/main/images/faces/face29.png" alt="image">';
+                            menu_html += '<img src="https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png" alt="image">';
 
                             menu_html += '<span class="sidebar-status-indicator"></span>';
                             menu_html += '</div>';
                             menu_html += '<div class="sidebar-profile-name">';
                                 menu_html += '<p class="sidebar-name">';
-                                    menu_html += '{Usuario}';
+                                    menu_html += username; 
                                     menu_html += '</p>';
                                     menu_html += '<p class="sidebar-designation">';
                                         menu_html += '  Online';
                                         menu_html += ' </p>';
                                         menu_html += ' </div>';
                                         menu_html += ' </div>';
-           
                                         menu_html += '</li>';
                 menu_items.forEach(function(item) {
                     console.log("item",item);
@@ -217,6 +221,9 @@
     });
 
     </script>
+    <script type="text/javascript">
+      var username = "{{ username }}";
+  </script>
 </body>
 
 </html>

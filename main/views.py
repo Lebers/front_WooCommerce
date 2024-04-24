@@ -26,7 +26,9 @@ def login_session(request):
 
 @login_required
 def home(request):
-    return render(request, 'home.html', {'api_url': settings.API_URL})
+    #username = "feber"
+    username = request.session.get('username', '{User}')
+    return render(request, 'home.html', {'api_url': settings.API_URL, 'username': username})
 
 @csrf_exempt
 def api_proxys(request):
@@ -123,6 +125,10 @@ def api_login(request):
                 user.set_unusable_password()  # Importante si no estás sincronizando contraseñas
                 user.save()
             login(request, user)
+
+            # Guardar el nombre de usuario en la sesión para su uso posterior
+            request.session['username'] = usernameD  # Almacenar el nombre de usuario en la sesión
+
             return HttpResponse(response.content, content_type=response.headers['Content-Type'], status=response.status_code)
         except User.DoesNotExist:
             # Crea un nuevo usuario en Django si es necesario o maneja según la política de tu aplicación
