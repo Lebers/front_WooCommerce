@@ -1,19 +1,18 @@
 import os
 import subprocess
-from dotenv import load_dotenv
 
-# Carga las variables de entorno del archivo .env
-load_dotenv()
+
 
 # Obtiene el nombre del servicio desde el archivo .env
-service_name = os.getenv('SERVICE_NAME')
+service_name = 'front_woocommerce.service'
+
 
 def run_command(command):
     """ Ejecuta un comando en el shell y retorna su salida. """
     try:
         result = subprocess.run(command, shell=True, check=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return result.stdout + result.stderr
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError as e: 
         return e.output + e.stderr
 
 def main():
