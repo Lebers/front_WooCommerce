@@ -14,3 +14,4 @@ erp_system/__pycache__/
 /main/__pycache__
 /main/migrations/__pycache__
 /pedidos/migrations/__pycache__
+db.sqlite3
