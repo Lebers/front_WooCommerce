@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Búsqueda de Producto</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css">
+    <link rel="stylesheet" href="{% static 'main/css/loader.css' %}" />
+    
+</head>
+<body class="bg-zinc-100 p-4 font-sans">
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+      </div>
+    <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow">
+        <h1 class="text-xl font-bold mb-4">Buscar Producto por SKU</h1>
+
+        <div class="mb-6">
+            <label for="sku-input" class="block mb-2 font-semibold">SKU (Código de Barras):</label>
+            <input type="text" id="sku-input" placeholder="Introduce el SKU" class="w-full p-2 border rounded">
+            <button id="search-btn" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Buscar</button>
+        </div>
+
+        <!-- Área para mostrar los resultados de la búsqueda -->
+        <div id="product-details" class="mt-6">
+            <!-- Los detalles del producto se cargarán aquí -->
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="{% static 'main/js/loaders.js' %}"></script>
+    <script>
+    $(document).ready(function(){
+        // Función para ejecutar la búsqueda
+        function searchProduct() {
+            var sku = $('#sku-input').val();
+            if (sku) {
+                $.ajax({
+                    url: "https://bazarcinema.com/wp-json/wc/v3/products?sku=" + sku,
+                    method: "GET",
+                    timeout: 0,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Basic Y2tfMjg3MjkxNzIzY2IyYjRiZDg3MDk4YjlhODM3OGQ3NmE2MzkyOTc0NDpjc19iMmJmZjU5ZDQ5OGExNjVmYjE1Y2YxNzY5N2FjMjI1ZGE4Y2I5ZTc2"
+                    },
+                    success: function(response) {
+                        $('#product-details').empty(); // Limpia resultados anteriores
+                        if (response.length > 0) {
+                            var product = response[0]; // Asume que la búsqueda por SKU devuelve un solo resultado
+                            displayProductDetails(product);
+                        } else {
+                            $('#product-details').append('<p>No se encontró el producto.</p>');
+                        }
+                    },
+                    error: function() {
+                        $('#product-details').html('<p>Error al buscar el producto.</p>');
+                    }
+                });
+            } else {
+                $('#product-details').html('<p>Por favor, introduce un SKU válido.</p>');
+            }
+        }
+
+        // Función para mostrar los detalles del producto
+        function displayProductDetails(product) {
+            $('#product-details').append('<p><strong>Nombre:</strong> ' + product.name + '</p>');
+            $('#product-details').append('<p><strong>Descripción:</strong> ' + product.description + '</p>');
+            $('#product-details').append('<p><strong>Descripción corta:</strong> ' + product.short_description + '</p>');
+            $('#product-details').append('<p><strong>Precio:</strong> ' + product.price_html + '</p>');
+            $('#product-details').append('<p><strong>SKU:</strong> ' + product.sku + '</p>');
+            $('#product-details').append('<p><strong>Stock:</strong> ' + (product.stock_quantity || 'No disponible') + '</p>');
+            $('#product-details').append('<p><strong>Fecha de Creación:</strong> ' + product.date_created + '</p>');
+            $('#product-details').append('<p><strong>Última Modificación:</strong> ' + product.date_modified + '</p>');
+            $('#product-details').append('<p><strong>Enlace Permanente:</strong> <a href="' + product.permalink + '" target="_blank">Ver Producto</a></p>');
+            $('#product-details').append('<p><strong>Categorías:</strong> ' + product.categories.map(cat => cat.name).join(', ') + '</p>');
+        }
+
+        // Evento para detectar la tecla Enter
+        $('#sku-input').keypress(function(event) {
+            if (event.which == 13) {
+                event.preventDefault(); // Evita la recarga de la página
+                searchProduct(); // Ejecuta la búsqueda
+            }
+        });
+
+        // Evento click para el botón de búsqueda
+        $('#search-btn').click(function(){
+            searchProduct(); // Ejecuta la búsqueda
+        });
+    });
+    </script>
+</body>
+</html>

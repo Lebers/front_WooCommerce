@@ -10,6 +10,9 @@ def incio(request):
 def product(request):
     return render(request, 'product.html', {'api_url': settings.API_URL})
 
+def listProduct(request):
+    return render(request, 'list_product.html', {'api_url': settings.API_URL})
+
 
 def newUser(request):
     return render(request, 'new_user_wherehouse.html', {'api_url': settings.API_URL})

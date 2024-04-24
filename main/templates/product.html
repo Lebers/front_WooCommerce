@@ -32,10 +32,17 @@
                 <label for="catalog-price" class="block mb-2 font-semibold">PRECIO DE CATÁLOGO</label>
                 <input type="text" id="catalog-price" placeholder="$" class="w-full p-2 border rounded">
             </div>
-            <div>
-                <label for="discounted-price" class="block mb-2 font-semibold">PRECIO REBAJADO</label>
-                <input type="text" id="discounted-price" placeholder="$" class="w-full p-2 border rounded">
-            </div>
+            
+        </div>
+
+        <div class="mb-6">
+            <label for="sku" class="block mb-2 font-semibold">SKU (Código de Barras)</label>
+            <input type="text" id="sku" placeholder="Escribe el SKU aquí" class="w-full p-2 border rounded">
+        </div>
+
+        <div class="mb-6">
+            <label for="stock-quantity" class="block mb-2 font-semibold">Cantidad en Stock</label>
+            <input type="number" id="stock-quantity" placeholder="Cantidad" class="w-full p-2 border rounded">
         </div>
  
  
@@ -46,27 +53,52 @@
 
   
         <div class="mb-6">
-            <label class="block mb-2 font-semibold">Imágenes</label>
-            <div class="grid grid-cols-4 gap-4">
-                <div class="text-center">
-                    <img src="https://placehold.co/100x100" alt="Front side" class="mb-2">
-                    <div>Front side</div>
-                </div>
-                <div class="text-center">
-                    <img src="https://placehold.co/100x100" alt="Close-up" class="mb-2">
-                    <div>Close-up</div>
-                </div>
-                <div class="text-center">
-                    <img src="https://placehold.co/100x100" alt="Variants" class="mb-2">
-                    <div>Variants</div>
-                </div>
-                <div class="text-center">
-                    <img src="https://placehold.co/100x100" alt="Lifestyle scene" class="mb-2">
-                    <div>Lifestyle scene</div>
-                </div>
-            </div>
-            <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Choose an image</button>
+             
+             <button id="upload-btn" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Guardar producto</button>
+
         </div>
     </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#upload-btn').click(function(event){
+                event.preventDefault(); // Previene la recarga de la página
+        
+                // Recolecta los datos del formulario
+                var productData = {
+                    "name": $('#name').val(),
+                    "description": $('#description').val(),
+                    "short_description": $('#summary').val(),
+                    "regular_price": $('#catalog-price').val(),
+                    "sku": $('#sku').val(), // Nuevo campo SKU
+                    "stock_quantity": $('#stock-quantity').val() // Nuevo campo cantidad en stock
+                };
+        
+                // Configura los settings del AJAX
+                var settings = {
+                    "url": "https://bazarcinema.com/wp-json/wc/v3/products",
+                    "method": "POST",
+                    "timeout": 0,
+                    "headers": {
+                        "Content-Type": "application/json",
+                        "Authorization": "Basic Y2tfMjg3MjkxNzIzY2IyYjRiZDg3MDk4YjlhODM3OGQ3NmE2MzkyOTc0NDpjc19iMmJmZjU5ZDQ5OGExNjVmYjE1Y2YxNzY5N2FjMjI1ZGE4Y2I5ZTc2"
+                    },
+                    "data": JSON.stringify(productData)
+                };
+        
+                // Realiza la llamada AJAX
+                $.ajax(settings).done(function (response) {
+                    console.log(response);
+                    alert('Producto creado exitosamente!');
+                }).fail(function (error) {
+                    console.error('Error al crear el producto:', error);
+                    alert('Error al crear el producto. Ver la consola para más detalles.');
+                });
+            });
+        });
+    </script>
+        
+
 </body>
 </html> 
