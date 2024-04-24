@@ -22,5 +22,12 @@ urlpatterns = [
     path('pedidos/', include('pedidos.urls')),
 
     path('product/', views.product, name='product'),
+
+
+    path('newUser/', views.newUser, name='newUser'),
+    path('listUsers/', views.listUsers, name='listUsers'),
+    path('listWere/', views.listWere, name='listWere'),
+    path('listProducts/', views.listProducts, name='listProducts'),
+    path('newWereHouse/', views.newWereHouse, name='newWereHouse'),
    
 ]

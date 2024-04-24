@@ -9,3 +9,15 @@ def incio(request):
 
 def product(request):
     return render(request, 'product.html', {'api_url': settings.API_URL})
+
+
+def newUser(request):
+    return render(request, 'new_user_wherehouse.html', {'api_url': settings.API_URL})
+def listUsers(request):
+    return render(request, 'list_users.html', {'api_url': settings.API_URL})
+def newWereHouse(request):
+    return render(request, 'new_werehouse.html', {'api_url': settings.API_URL})
+def listWere(request):
+    return render(request, 'list_wherehouse.html', {'api_url': settings.API_URL})
+def listProducts(request):
+    return render(request, 'list_products.html', {'api_url': settings.API_URL})
