@@ -20,5 +20,7 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),
     path('usuario/', include('usuario.urls')),
     path('pedidos/', include('pedidos.urls')),
+
+    path('product/', views.product, name='product'),
    
 ]

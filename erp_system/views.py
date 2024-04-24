@@ -6,3 +6,6 @@ from django.conf import settings
 #@login_required
 def incio(request):
     return render(request, 'incio.html', {'api_url': settings.API_URL})
+
+def product(request):
+    return render(request, 'product.html', {'api_url': settings.API_URL})
