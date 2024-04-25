@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>New Product Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="{% static 'main/css/loader.css' %}" />
+    <style>
+        body {
+            background-color: transparent !important; /* Fondo transparente */
+        }
+    </style>
+ 
+</head>
+<body   >
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+    </div>
+    <div class="container" style="padding-top: 60px;" >
+        <div class="bg-white p-6 rounded-lg shadow" style="padding: 20px;">
+            <h3 id="page-title" class="  font-weight-bold mb-4"> </h3>
+            <h6 id="page-descripcion" class="text-muted font-weight-bold mb-2"> </h6>
+            <hr><br>
+            <div class="mb-6">
+                <table id="example" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>title</th>
+                            <th>catalogname</th>
+                            <th>description</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{% static 'main/js/loaders.js' %}"></script>
+    <script>
+        $(document).ready(function() {
+            var catalogoName = "{{ catalogoName }}";
+            $('#example').DataTable({
+                "ajax": {
+                    "url": "http://inventario.99degrees.tech/catalogs_special/"+catalogoName,
+                    "method": "GET",
+                    "headers": {
+                        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTQwOTY1NjcsImlkIjozMiwidXNlcm5hbWUiOiJyb290IiwiZmlyc3RfbmFtZSI6InN1cGVyIHVzdWFyaW8iLCJsYXN0X25hbWUiOiJsYXN0X25hbWUiLCJiaXJ0aGRhdGUiOm51bGwsImVtYWlsIjoicm9vdEBnbWFpbC5jb20iLCJwaG9uZSI6bnVsbH0.JWYhN-wSZwaqZJFBuuxvXW4CaeYIGbZOif-or-EU-uA"
+                    },
+                    "dataSrc": function(json) {
+                        // Actualizar el título de la pestaña y de la página usando la información cargada
+                        if (json.data.info.length > 0) {
+                            var title = json.data.info[0].title; // Suponiendo que siempre habrá al menos un elemento
+                            document.title = title; // Cambia el título de la pestaña
+                            $('#page-title').text(title); // Cambia el título de la página
+                            $('#page-descripcion').text(json.data.info[0].description); // Cambia la descripción si es necesario
+                        }
+                        return json.data.detail; // Asegúrate de que 'detail' es lo que quieres mostrar en la tabla
+                    }
+                },
+                "columns": [
+                    { "data": "id" },
+                    { "data": "title" },
+                    { "data": "catalogname" },
+                    { "data": "description" } 
+                ],
+                scrollX: true
+            });
+        });
+    </script>
+</body>
+</html>

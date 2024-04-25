@@ -33,5 +33,12 @@ urlpatterns = [
     path('listWere/', views.listWere, name='listWere'),
     path('listProducts/', views.listProducts, name='listProducts'),
     path('newWereHouse/', views.newWereHouse, name='newWereHouse'),
-   
+
+
+    path('specialCatalogs', views.specialCatalogs, name='specialCatalogs'),
+    path('specialCatalogs/<str:catalogoName>/', views.specialCatalogs, name='specialCatalogs'),
+
+
+
+
 ]
