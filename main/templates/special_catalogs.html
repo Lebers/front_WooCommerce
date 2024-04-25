@@ -21,7 +21,7 @@
         <div class="bg-white p-6 rounded-lg shadow" style="padding: 20px;">
             <h3 id="page-title" class="  font-weight-bold mb-4"> </h3>
             <h6 id="page-descripcion" class="text-muted font-weight-bold mb-2"> </h6>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCatalogModal">
+            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addCatalogModal">
                 Agregar
               </button>
             <hr><br>
@@ -100,7 +100,19 @@
                     { "data": "title" },
                     { "data": "description" } 
                 ],
-                scrollX: true
+                scrollX: true,
+                layout: {
+                    topStart: {
+                        buttons: [
+                            {
+                                text: 'My button',
+                                action: function (e, dt, node, config) {
+                                    alert('Button activated');
+                                }
+                            }
+                        ]
+                    }
+                }
             });
         });
     </script>
