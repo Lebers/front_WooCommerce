@@ -21,7 +21,10 @@ urlpatterns = [
     path('usuario/', include('usuario.urls')),
     path('pedidos/', include('pedidos.urls')),
 
-    path('product/', views.product, name='product'),
+    path('product/', views.product, name='product_overview'),
+    path('product/<int:id>/', views.product, name='product'),
+    
+    
     path('listProduct/', views.listProduct, name='product'),
 
 

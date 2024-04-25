@@ -29,6 +29,8 @@
     <script src="{% static 'main/js/loaders.js' %}"></script>
     <script>
     $(document).ready(function(){
+
+        var baseUrl = window.location.origin;
         // Función para ejecutar la búsqueda
         function searchProduct() {
             var sku = $('#sku-input').val();
@@ -71,6 +73,12 @@
             $('#product-details').append('<p><strong>Última Modificación:</strong> ' + product.date_modified + '</p>');
             $('#product-details').append('<p><strong>Enlace Permanente:</strong> <a href="' + product.permalink + '" target="_blank">Ver Producto</a></p>');
             $('#product-details').append('<p><strong>Categorías:</strong> ' + product.categories.map(cat => cat.name).join(', ') + '</p>');
+            $('#product-details').append('<p> <button id="edit-btn" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Editar</button> </p>');
+
+
+            $('#edit-btn').on('click', function() {
+                window.location.href = baseUrl + '/product/' + product.id + '/';
+            });
         }
 
         // Evento para detectar la tecla Enter

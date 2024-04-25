@@ -2,13 +2,18 @@ import requests
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.shortcuts import render, get_object_or_404
 
 #@login_required
 def incio(request):
     return render(request, 'incio.html', {'api_url': settings.API_URL})
 
-def product(request):
-    return render(request, 'product.html', {'api_url': settings.API_URL})
+#def product(request):
+#    return render(request, 'product.html', {'api_url': settings.API_URL})
+def product(request, id=None):
+    # Solo se pasa el ID al contexto si existe
+    context = {'product_id': id} if id else {}
+    return render(request, 'product.html', context)
 
 def listProduct(request):
     return render(request, 'list_product.html', {'api_url': settings.API_URL})

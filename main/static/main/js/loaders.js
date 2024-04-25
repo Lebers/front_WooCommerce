@@ -1,21 +1,26 @@
-// Llama a showPage cuando la página esté completamente cargada
-window.addEventListener('load', function () {
-    showPage();
-});
+//loader.js
+// Asegura que el loader está oculto inicialmente
+document.getElementById("loader-wrapper").style.display = "none";
 
-function showPage() {
+// Muestra el loader
+function showLoader() {
+    $("#loader-wrapper").show();
+}
+
+// Oculta el loader
+function hideLoader() {
     document.getElementById("loader-wrapper").style.display = "none";
 }
 
+// Muestra el loader al iniciar cualquier llamada AJAX
 $(document).ready(function() {
-    // Mostrar el loader al iniciar una llamada AJAX
-    $(document).ajaxStart(function() {
-        $("#loader-wrapper").show();
+    // Mostrar el loader al iniciar cualquier llamada AJAX
+    $(document).on('ajaxStart', function() {
+        showLoader();
     });
 
     // Ocultar el loader al completar todas las llamadas AJAX
-    $(document).ajaxStop(function() {
-        $("#loader-wrapper").hide();
+    $(document).on('ajaxStop', function() {
+        hideLoader();
     });
-
 });

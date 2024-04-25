@@ -11,6 +11,24 @@
         .text-zinc-700 { color: #33475b; }
         .text-zinc-800 { color: #243447; }
         .text-zinc-900 { color: #102a43; }
+
+
+        #loader-wrapper {
+    display: none; /* Oculto por defecto */
+    position: fixed; /* Fijo en la pantalla */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+    z-index: 1000; /* Asegura que esté sobre otros elementos */
+    display: flex; /* Uso flexbox para centrar el contenido */
+    justify-content: center; /* Centrado horizontal */
+    align-items: center; /* Centrado vertical */
+}
+
+
+
     </style>
     <link rel="stylesheet" href="{% static 'main/css/loader.css' %}" />
          
@@ -20,7 +38,7 @@
         <div id="loader"></div>
       </div>
     <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow">
-        <h1 class="text-xl font-bold mb-4">Nuevo producto</h1>
+        <h1 id="page-title" class="text-xl font-bold mb-4">Nuevo producto</h1>
          
         <div class="mb-6">
             <label for="name" class="block mb-2 font-semibold">NOMBRE*</label>
@@ -60,50 +78,119 @@
         <div class="mb-6">
              
              <button id="upload-btn" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Guardar producto</button>
+             <button id="update-btn" class="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 hidden">Actualizar producto</button>
+
 
         </div>
     </div>
     
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="{% static 'main/js/loaders.js' %}"></script>
-    <script>
-        $(document).ready(function(){
-            $('#upload-btn').click(function(event){
-                event.preventDefault(); // Previene la recarga de la página
-        
-                // Recolecta los datos del formulario
-                var productData = {
-                    "name": $('#name').val(),
-                    "description": $('#description').val(),
-                    "short_description": $('#summary').val(),
-                    "regular_price": $('#catalog-price').val(),
-                    "sku": $('#sku').val(), // Nuevo campo SKU
-                    "stock_quantity": $('#stock-quantity').val() // Nuevo campo cantidad en stock
-                };
-        
-                // Configura los settings del AJAX
-                var settings = {
-                    "url": "https://bazarcinema.com/wp-json/wc/v3/products",
-                    "method": "POST",
-                    "timeout": 0,
-                    "headers": {
-                        "Content-Type": "application/json",
-                        "Authorization": "Basic Y2tfMjg3MjkxNzIzY2IyYjRiZDg3MDk4YjlhODM3OGQ3NmE2MzkyOTc0NDpjc19iMmJmZjU5ZDQ5OGExNjVmYjE1Y2YxNzY5N2FjMjI1ZGE4Y2I5ZTc2"
-                    },
-                    "data": JSON.stringify(productData)
-                };
-        
-                // Realiza la llamada AJAX
-                $.ajax(settings).done(function (response) {
-                    console.log(response);
-                    alert('Producto creado exitosamente!');
-                }).fail(function (error) {
-                    console.error('Error al crear el producto:', error);
-                    alert('Error al crear el producto. Ver la consola para más detalles.');
-                });
+    <script> 
+
+
+$(document).ready(function() {
+   
+    
+    var productId = {{ product_id|default_if_none:"null" }};
+
+    if (productId !== "null") {
+        $("#page-title").text("Editar producto");
+        $("#upload-btn").addClass("hidden");
+        $("#update-btn").removeClass("hidden");
+
+        $("#update-btn").click(function(event) {
+            event.preventDefault();
+            $("#loader-wrapper").show();
+
+            var productData = {
+                "name": $('#name').val(),
+                "description": $('#description').val(),
+                "short_description": $('#summary').val(),
+                "regular_price": $('#catalog-price').val(),
+                "sku": $('#sku').val(),
+                "stock_quantity": $('#stock-quantity').val()
+            };
+
+            $.ajax({
+                url: "https://bazarcinema.com/wp-json/wc/v3/products/" + productId,
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(productData),
+                headers: {
+                    "Authorization": "Basic Y2tfMjg3MjkxNzIzY2IyYjRiZDg3MDk4YjlhODM3OGQ3NmE2MzkyOTc0NDpjc19iMmJmZjU5ZDQ5OGExNjVmYjE1Y2YxNzY5N2FjMjI1ZGE4Y2I5ZTc2"
+                },
+                success: function(response) {
+                    alert('Producto actualizado exitosamente.');
+                },
+                error: function() {
+                    alert('Error al actualizar el producto.');
+                },
+                complete: function() {
+                    $("#loader-wrapper").hide();
+                }
             });
         });
+    }
+
+
+
+    $('#upload-btn').click(function(event) {
+        event.preventDefault();
+        $("#loader-wrapper").show();
+
+        var productData = {
+            "name": $('#name').val(),
+            "description": $('#description').val(),
+            "short_description": $('#summary').val(),
+            "regular_price": $('#catalog-price').val(),
+            "sku": $('#sku').val(),
+            "stock_quantity": $('#stock-quantity').val()
+        };
+
+        $.ajax({
+            url: "https://bazarcinema.com/wp-json/wc/v3/products",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(productData),
+            success: function(response) {
+                alert('Producto creado exitosamente.');
+            },
+            error: function() {
+                alert('Error al crear el producto.');
+            },
+            complete: function() {
+                $("#loader-wrapper").hide();
+            }
+        });
+    });
+
+    if (productId !== "null") {
+        $("#loader-wrapper").show();
+        $.ajax({
+            url: "https://bazarcinema.com/wp-json/wc/v3/products/" + productId,
+            method: "GET",
+            headers: {
+                "Authorization": "Basic Y2tfMjg3MjkxNzIzY2IyYjRiZDg3MDk4YjlhODM3OGQ3NmE2MzkyOTc0NDpjc19iMmJmZjU5ZDQ5OGExNjVmYjE1Y2YxNzY5N2FjMjI1ZGE4Y2I5ZTc2"
+            },
+            success: function(response) {
+                $('#name').val(response.name);
+                $('#summary').val(response.short_description);
+                $('#catalog-price').val(response.regular_price);
+                $('#sku').val(response.sku);
+                $('#stock-quantity').val(response.stock_quantity);
+                $('#description').val(response.description);
+            },
+            complete: function() {
+                $("#loader-wrapper").hide();
+            }
+        });
+    }
+});
+
+
     </script>
+    
         
 
 </body>
