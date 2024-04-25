@@ -98,7 +98,10 @@
             var last_name = document.getElementById('last_name').value;
             var username = document.getElementById('username').value;
             var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
             var profile_id  = document.getElementById('profile_id').value;
+            var warehouse_id  = document.getElementById('warehouse_id').value;
+            var username  = document.getElementById('username').value;
             $.ajax({
                 url: '/api_proxy/',
                 type: 'POST',
@@ -111,7 +114,11 @@
                     "last_name": last_name,
                     "username": username,
                     "email": email,
-                    "profile_id":profile_id  
+                    "profile_id":profile_id,
+                    "password":password,
+                    "warehouse_id":warehouse_id,
+                    "username":username,
+                    
                 }),
                 success: function(response) {
                     toasty.success(response.message);
