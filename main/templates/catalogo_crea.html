@@ -73,19 +73,28 @@
                 var title = document.getElementById('catalogTitle').value;
                 var description = document.getElementById('catalogDescription').value;
                 var parent_id = document.getElementById('catalogParet').value;
+
+                // Objeto de datos básico sin parent_id
+                var dataToSend = {
+                    "api_method": "catalog",
+                    "type_method": "POST",
+                    "catalogname": catalogname,
+                    "title": title,
+                    "description": description
+                };
+
+                // Agrega parent_id solo si no está vacío
+                if (parent_id) {
+                    dataToSend.parent_id = parent_id;
+                }
+                
+                
                 $.ajax({
                     url: '/api_proxy/',
                     type: 'POST',
                     contentType: 'application/json',
                     dataType: 'json',
-                    data: JSON.stringify({
-                        "api_method": "catalog",
-                        "type_method": "POST",
-                        "catalogname": catalogname,
-                        "title": title,
-                        "description": description,
-                        "parent_id": parent_id 
-                    }),
+                    data: JSON.stringify(dataToSend),
                     success: function(response) {
                         toasty.success(response.message);
                     },
