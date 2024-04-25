@@ -21,6 +21,9 @@
         <div class="bg-white p-6 rounded-lg shadow" style="padding: 20px;">
             <h3 id="page-title" class="  font-weight-bold mb-4"> </h3>
             <h6 id="page-descripcion" class="text-muted font-weight-bold mb-2"> </h6>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCatalogModal">
+                Agregar
+              </button>
             <hr><br>
             <div class="mb-6">
                 <table id="example" class="table table-striped" style="width:100%">
@@ -35,6 +38,34 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+<div class="modal fade" id="addCatalogModal" tabindex="-1" aria-labelledby="addCatalogModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCatalogModalLabel">Nuevo Catálogo</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="addCatalogForm">
+            <div class="form-group">
+              <label for="title">Título</label>
+              <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+              <label for="description">Descripción</label>
+              <input type="text" class="form-control" id="description" name="description" required>
+            </div>
+            <input type="hidden" id="parent_id" name="parent_id" >
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
     
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -59,6 +90,7 @@
                             document.title = title; // Cambia el título de la pestaña
                             $('#page-title').text(title); // Cambia el título de la página
                             $('#page-descripcion').text(json.data.info[0].description); // Cambia la descripción si es necesario
+                            $('#parent_id').val(json.data.info[0].id); // Cambia la descripción si es necesario
                         }
                         return json.data.detail; // Asegúrate de que 'detail' es lo que quieres mostrar en la tabla
                     }
@@ -72,5 +104,39 @@
             });
         });
     </script>
+
+<script>
+    $(document).ready(function() {
+        $('#addCatalogForm').on('submit', function(e) {
+            e.preventDefault(); // Evita el comportamiento por defecto de enviar el formulario
+    
+            var postData = {
+                title: $('#title').val(),
+                description: $('#description').val(),
+                parent_id: $('#parent_id').val()
+            };
+    
+            $.ajax({
+                type: "POST",
+                "headers": {
+                        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTQwOTY1NjcsImlkIjozMiwidXNlcm5hbWUiOiJyb290IiwiZmlyc3RfbmFtZSI6InN1cGVyIHVzdWFyaW8iLCJsYXN0X25hbWUiOiJsYXN0X25hbWUiLCJiaXJ0aGRhdGUiOm51bGwsImVtYWlsIjoicm9vdEBnbWFpbC5jb20iLCJwaG9uZSI6bnVsbH0.JWYhN-wSZwaqZJFBuuxvXW4CaeYIGbZOif-or-EU-uA"
+                    },
+                url: "http://inventario.99degrees.tech/catalog", // Asegúrate de tener definida la variable `api_url`
+                contentType: "application/json",
+                data: JSON.stringify(postData),
+                success: function(response) {
+                    $('#addCatalogModal').modal('hide'); // Oculta el modal
+                    $('#example').DataTable().ajax.reload(); // Recarga la tabla para mostrar los nuevos datos
+                    alert('Catálogo agregado exitosamente');
+                },
+                error: function(response) {
+                    alert('Error al agregar el catálogo');
+                }
+            });
+        });
+    });
+    </script>
+
+
 </body>
 </html>
