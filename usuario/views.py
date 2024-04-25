@@ -5,3 +5,6 @@ def nuevo_usuario(request):
 
 def buscar(request):
     return render(request, 'buscar.html')
+
+def nuevo_usuario_warehouse(request):
+    return render(request, 'nuevo_usuario_warehouse.html')
