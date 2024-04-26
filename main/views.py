@@ -127,7 +127,9 @@ def api_proxy_wc(request):
             return HttpResponse("Unsupported HTTP method", status=405)
 
         # Devolver la respuesta al cliente
-        return HttpResponse(response.content, content_type=response.headers['Content-Type'], status=response.status_code)
+        #return HttpResponse(response.content, content_type=response.headers['Content-Type'], status=response.status_code)
+        return JsonResponse(response.json(), safe=False, status=response.status_code)
+
 
     return HttpResponse("Unsupported method", status=405)
 

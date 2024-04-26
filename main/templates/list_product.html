@@ -45,9 +45,8 @@
                     }),
                     success: function(response) {
                         $('#product-details').empty(); // Limpia resultados anteriores
-                        var data = JSON.parse(response); // Parsea la respuesta si es necesario
-                        if (data.length > 0) {
-                            var product = data[0]; // Asume que la búsqueda por SKU devuelve un solo resultado
+                        if (response.length > 0) {
+                            var product = response[0]; // Asume que la búsqueda por SKU devuelve un solo resultado
                             displayProductDetails(product);
                         } else {
                             $('#product-details').append('<p>No se encontró el producto.</p>');
