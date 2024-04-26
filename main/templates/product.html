@@ -90,45 +90,47 @@
 $(document).ready(function() {
    
     
-    var productId = {{ product_id|default_if_none:"null" }};
+    var productId = {% if product_id is not None %}{{ product_id }}{% else %}null{% endif %};
 
-    if (productId !== "null") {
-        $("#page-title").text("Editar producto");
-        $("#upload-btn").addClass("hidden");
-        $("#update-btn").removeClass("hidden");
 
-        $("#update-btn").click(function(event) {
-            event.preventDefault();
-            $("#loader-wrapper").show();
+    if (productId !== null) {
+    $("#page-title").text("Editar producto");
+    $("#upload-btn").addClass("hidden");
+    $("#update-btn").removeClass("hidden");
 
-            var productData = {
-                "name": $('#name').val(),
-                "description": $('#description').val(),
-                "short_description": $('#summary').val(),
-                "regular_price": $('#catalog-price').val(),
-                "sku": $('#sku').val(),
-                "stock_quantity": $('#stock-quantity').val(),
-                "api_method": "wp-json/wc/v3/products/" + productId, // Asegúrate de definir 'productId'
-                "type_method": "PUT"  // Especifica que es una petición PUT
-            };
+    $("#update-btn").click(function(event) {
+        event.preventDefault();
+        $("#loader-wrapper").show();
 
-            $.ajax({
-                url: "/api_proxy_wc/",  // Cambiado para apuntar al endpoint del servidor Django
-                type: "POST",  // El método siempre es POST porque estamos enviando a un proxy
-                contentType: "application/json",
-                data: JSON.stringify(productData),
-                success: function(response) {
-                    alert('Producto actualizado exitosamente.');
-                },
-                error: function() {
-                    alert('Error al actualizar el producto.');
-                },
-                complete: function() {
-                    $("#loader-wrapper").hide();
-                }
-            });
+        var productData = {
+            "name": $('#name').val(),
+            "description": $('#description').val(),
+            "short_description": $('#summary').val(),
+            "regular_price": $('#catalog-price').val(),
+            "sku": $('#sku').val(),
+            "stock_quantity": $('#stock-quantity').val(),
+            "api_method": "wp-json/wc/v3/products/" + productId, // Asegúrate de definir 'productId'
+            "type_method": "PUT"  // Especifica que es una petición PUT
+        };
+
+        $.ajax({
+            url: "/api_proxy_wc/",  // Cambiado para apuntar al endpoint del servidor Django
+            type: "POST",  // El método siempre es POST porque estamos enviando a un proxy
+            contentType: "application/json",
+            data: JSON.stringify(productData),
+            success: function(response) {
+                alert('Producto actualizado exitosamente.');
+            },
+            error: function() {
+                alert('Error al actualizar el producto.');
+            },
+            complete: function() {
+                $("#loader-wrapper").hide();
+            }
         });
-    }
+    });
+}
+
 
 
 
