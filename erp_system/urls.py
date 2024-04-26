@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
-from main.views import login_session, home, api_proxy,api_login
+from main.views import login_session, home, api_proxy,api_login,api_proxy_wc
 from . import views
 
 urlpatterns = [
@@ -10,6 +10,7 @@ urlpatterns = [
     path('home', home, name='home'),
 
     path('api_proxy/', api_proxy),
+    path('api_proxy_wc/', api_proxy_wc),
     path('api_login', api_login),
     path('inicio/', views.incio, name='inicio'),
 

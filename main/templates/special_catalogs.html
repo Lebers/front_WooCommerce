@@ -78,11 +78,16 @@
             var catalogoName = "{{ catalogoName }}";
             $('#example').DataTable({
                 "ajax": {
-                    "url": "http://inventario.99degrees.tech/catalogs_special/"+catalogoName,
-                    "method": "GET",
-                    "headers": {
-                        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTQwOTY1NjcsImlkIjozMiwidXNlcm5hbWUiOiJyb290IiwiZmlyc3RfbmFtZSI6InN1cGVyIHVzdWFyaW8iLCJsYXN0X25hbWUiOiJsYXN0X25hbWUiLCJiaXJ0aGRhdGUiOm51bGwsImVtYWlsIjoicm9vdEBnbWFpbC5jb20iLCJwaG9uZSI6bnVsbH0.JWYhN-wSZwaqZJFBuuxvXW4CaeYIGbZOif-or-EU-uA"
+                    "url": "/api_proxy/",
+                    "method": "post",
+                    "contentType": "application/json",
+                    "data": function (d) {
+                        return JSON.stringify({
+                            "api_method": "catalogs_special/"+catalogoName,
+                            "type_method": "GET"
+                        });
                     },
+                    "dataType": "json",
                     "dataSrc": function(json) {
                         // Actualizar el título de la pestaña y de la página usando la información cargada
                         if (json.data.info.length > 0) {
@@ -123,17 +128,16 @@
             e.preventDefault(); // Evita el comportamiento por defecto de enviar el formulario
     
             var postData = {
+                "api_method": "catalog",
+                "type_method": "POST",
                 title: $('#title').val(),
                 description: $('#description').val(),
                 parent_id: $('#parent_id').val()
             };
     
             $.ajax({
+                url: '/api_proxy/',
                 type: "POST",
-                "headers": {
-                        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTQwOTY1NjcsImlkIjozMiwidXNlcm5hbWUiOiJyb290IiwiZmlyc3RfbmFtZSI6InN1cGVyIHVzdWFyaW8iLCJsYXN0X25hbWUiOiJsYXN0X25hbWUiLCJiaXJ0aGRhdGUiOm51bGwsImVtYWlsIjoicm9vdEBnbWFpbC5jb20iLCJwaG9uZSI6bnVsbH0.JWYhN-wSZwaqZJFBuuxvXW4CaeYIGbZOif-or-EU-uA"
-                    },
-                url: "http://inventario.99degrees.tech/catalog", // Asegúrate de tener definida la variable `api_url`
                 contentType: "application/json",
                 data: JSON.stringify(postData),
                 success: function(response) {

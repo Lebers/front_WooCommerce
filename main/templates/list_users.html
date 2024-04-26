@@ -77,11 +77,16 @@
             var catalogoName = "{{ catalogoName }}";
             $('#example').DataTable({
                 "ajax": {
-                    "url": "http://inventario.99degrees.tech/users/",
-                    "method": "GET",
-                    "headers": {
-                        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTQwOTY1NjcsImlkIjozMiwidXNlcm5hbWUiOiJyb290IiwiZmlyc3RfbmFtZSI6InN1cGVyIHVzdWFyaW8iLCJsYXN0X25hbWUiOiJsYXN0X25hbWUiLCJiaXJ0aGRhdGUiOm51bGwsImVtYWlsIjoicm9vdEBnbWFpbC5jb20iLCJwaG9uZSI6bnVsbH0.JWYhN-wSZwaqZJFBuuxvXW4CaeYIGbZOif-or-EU-uA"
+                    "url": "/api_proxy/",
+                    "method": "post",
+                    "contentType": "application/json",
+                    "data": function (d) {
+                        return JSON.stringify({
+                            "api_method": "users",
+                            "type_method": "GET"
+                        });
                     },
+                    "dataType": "json",
                     "dataSrc": function(json) {
                         return json.data;  
                     }
@@ -114,20 +119,17 @@
         $('#addCatalogForm').on('submit', function(e) {
             e.preventDefault(); // Evita el comportamiento por defecto de enviar el formulario
     
-            var postData = {
-                title: $('#title').val(),
-                description: $('#description').val(),
-                parent_id: $('#parent_id').val()
-            };
-    
             $.ajax({
+                url: '/api_proxy/',
                 type: "POST",
-                "headers": {
-                        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTQwOTY1NjcsImlkIjozMiwidXNlcm5hbWUiOiJyb290IiwiZmlyc3RfbmFtZSI6InN1cGVyIHVzdWFyaW8iLCJsYXN0X25hbWUiOiJsYXN0X25hbWUiLCJiaXJ0aGRhdGUiOm51bGwsImVtYWlsIjoicm9vdEBnbWFpbC5jb20iLCJwaG9uZSI6bnVsbH0.JWYhN-wSZwaqZJFBuuxvXW4CaeYIGbZOif-or-EU-uA"
-                    },
-                url: "http://inventario.99degrees.tech/catalog", // Asegúrate de tener definida la variable `api_url`
                 contentType: "application/json",
-                data: JSON.stringify(postData),
+                data: JSON.stringify({
+                    "api_method": "catalog",
+                    "type_method": "POST",
+                    title: $('#title').val(),
+                    description: $('#description').val(),
+                    parent_id: $('#parent_id').val()
+                }),
                 success: function(response) {
                     $('#addCatalogModal').modal('hide'); // Oculta el modal
                     $('#example').DataTable().ajax.reload(); // Recarga la tabla para mostrar los nuevos datos

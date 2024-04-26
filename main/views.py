@@ -9,6 +9,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 import json
+import base64
+
 
 
 
@@ -86,9 +88,48 @@ def api_proxy(request):
 
     return HttpResponse("Unsupported method", status=405)
 
- 
- 
+@csrf_exempt
+def api_proxy_wc(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return HttpResponse("Invalid JSON", status=400)
 
+        api_method = data.get('api_method', 'products')  # Asegúrate de que esto llegue correctamente formado
+        type_method = data.get('type_method', 'POST').upper()
+
+        # URL base de WooCommerce
+        api_url = "https://bazarcinema.com/"
+        consumer_key = "ck_287291723cb2b4bd87098b9a8378d76a63929744"
+        consumer_secret = "cs_b2bff59d498a165fb15cf17697ac225da8cb9e76"
+
+        # Codificar las credenciales para autenticación básica
+        credentials = f"{consumer_key}:{consumer_secret}"
+        encoded_credentials = base64.b64encode(credentials.encode('utf-8')).decode('utf-8')
+        headers = {
+            'Authorization': f'Basic {encoded_credentials}',
+            'Content-Type': 'application/json',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'  # Ejemplo de User-Agent
+        }
+
+        # Construye la URL final dependiendo del método API
+        final_url = f"{api_url}{api_method}"
+
+        # Determina el método HTTP y hace la petición
+        if type_method == 'POST':
+            response = requests.post(final_url, json=data, headers=headers)
+        elif type_method == 'GET':
+            response = requests.get(final_url, params=data, headers=headers)
+        elif type_method == 'PUT':
+            response = requests.put(final_url, json=data, headers=headers)
+        else:
+            return HttpResponse("Unsupported HTTP method", status=405)
+
+        # Devolver la respuesta al cliente
+        return HttpResponse(response.content, content_type=response.headers['Content-Type'], status=response.status_code)
+
+    return HttpResponse("Unsupported method", status=405)
 
 
 @csrf_exempt

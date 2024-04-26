@@ -5,7 +5,6 @@
     <title>New Product Page</title>
     <!-- Add your CSS stylesheets and JavaScript files here -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css">
-    
     <style>
          
         .text-zinc-600 { color: #657786; }
@@ -28,7 +27,7 @@
             align-items: center; /* Centrado vertical */
         }
     </style>
-
+    
     <link rel="stylesheet" href="{% static 'main/css/loader.css' %}" />
          
 </head>
@@ -108,17 +107,16 @@ $(document).ready(function() {
                 "short_description": $('#summary').val(),
                 "regular_price": $('#catalog-price').val(),
                 "sku": $('#sku').val(),
-                "stock_quantity": $('#stock-quantity').val()
+                "stock_quantity": $('#stock-quantity').val(),
+                "api_method": "wp-json/wc/v3/products/" + productId, // Asegúrate de definir 'productId'
+                "type_method": "PUT"  // Especifica que es una petición PUT
             };
 
             $.ajax({
-                url: "https://bazarcinema.com/wp-json/wc/v3/products/" + productId,
-                type: "PUT",
+                url: "/api_proxy_wc/",  // Cambiado para apuntar al endpoint del servidor Django
+                type: "POST",  // El método siempre es POST porque estamos enviando a un proxy
                 contentType: "application/json",
                 data: JSON.stringify(productData),
-                headers: {
-                    "Authorization": "Basic Y2tfMjg3MjkxNzIzY2IyYjRiZDg3MDk4YjlhODM3OGQ3NmE2MzkyOTc0NDpjc19iMmJmZjU5ZDQ5OGExNjVmYjE1Y2YxNzY5N2FjMjI1ZGE4Y2I5ZTc2"
-                },
                 success: function(response) {
                     alert('Producto actualizado exitosamente.');
                 },
@@ -138,24 +136,28 @@ $(document).ready(function() {
         event.preventDefault();
         $("#loader-wrapper").show();
 
-        var productData = {
+        var postData = {
             "name": $('#name').val(),
             "description": $('#description').val(),
             "short_description": $('#summary').val(),
             "regular_price": $('#catalog-price').val(),
             "sku": $('#sku').val(),
-            "stock_quantity": $('#stock-quantity').val()
+            "stock_quantity": $('#stock-quantity').val(),
+            "api_method": "wp-json/wc/v3/products/",
+            "type_method": "POST" 
         };
 
         $.ajax({
-            url: "https://bazarcinema.com/wp-json/wc/v3/products",
-            type: "POST",
+            url: "/api_proxy_wc/" ,
+            method: "POST",
             contentType: "application/json",
-            data: JSON.stringify(productData),
+            data: JSON.stringify(postData),
             success: function(response) {
                 alert('Producto creado exitosamente.');
             },
             error: function() {
+                console.error("Error status:", status);
+                console.error("Error details:", xhr.responseText);
                 alert('Error al crear el producto.');
             },
             complete: function() {
@@ -166,12 +168,17 @@ $(document).ready(function() {
 
     if (productId !== "null") {
         $("#loader-wrapper").show();
+
+        var postData = {
+                "api_method": "wp-json/wc/v3/products/"+ productId,
+                "type_method": "GET" 
+            };
+
         $.ajax({
-            url: "https://bazarcinema.com/wp-json/wc/v3/products/" + productId,
-            method: "GET",
-            headers: {
-                "Authorization": "Basic Y2tfMjg3MjkxNzIzY2IyYjRiZDg3MDk4YjlhODM3OGQ3NmE2MzkyOTc0NDpjc19iMmJmZjU5ZDQ5OGExNjVmYjE1Y2YxNzY5N2FjMjI1ZGE4Y2I5ZTc2"
-            },
+            url: "/api_proxy_wc/" ,
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(postData),
             success: function(response) {
                 $('#name').val(response.name);
                 $('#summary').val(response.short_description);

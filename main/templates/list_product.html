@@ -36,17 +36,18 @@
             var sku = $('#sku-input').val();
             if (sku) {
                 $.ajax({
-                    url: "https://bazarcinema.com/wp-json/wc/v3/products?sku=" + sku,
-                    method: "GET",
-                    timeout: 0,
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "Basic Y2tfMjg3MjkxNzIzY2IyYjRiZDg3MDk4YjlhODM3OGQ3NmE2MzkyOTc0NDpjc19iMmJmZjU5ZDQ5OGExNjVmYjE1Y2YxNzY5N2FjMjI1ZGE4Y2I5ZTc2"
-                    },
+                    url: "/api_proxy_wc/", // URL del proxy en lugar de la URL directa de WooCommerce
+                    method: "POST", // Usamos POST para enviar datos al proxy
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        "api_method": "wp-json/wc/v3/products?sku=" + sku,
+                        "type_method": "GET" // El método original que queremos que use el proxy
+                    }),
                     success: function(response) {
                         $('#product-details').empty(); // Limpia resultados anteriores
-                        if (response.length > 0) {
-                            var product = response[0]; // Asume que la búsqueda por SKU devuelve un solo resultado
+                        var data = JSON.parse(response); // Parsea la respuesta si es necesario
+                        if (data.length > 0) {
+                            var product = data[0]; // Asume que la búsqueda por SKU devuelve un solo resultado
                             displayProductDetails(product);
                         } else {
                             $('#product-details').append('<p>No se encontró el producto.</p>');
