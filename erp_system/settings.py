@@ -1,5 +1,8 @@
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-aib4wo4)l_g*j)i(2-6awxt8=6*p^&vz=pvgrtz*9kwd6ytxx7"
@@ -93,7 +96,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOW_ALL_ORIGINS = True  
 
-API_URL = os.getenv('API_URL', 'http://localhost:8001')
+API_URL = os.getenv('API_URL', 'localhost')
 
 LOGIN_URL = '/login'
 
