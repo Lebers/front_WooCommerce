@@ -72,7 +72,6 @@
                     
 
                           <div class="text-right">
-                            <button class="btn btn-light">Cancelar</button>
                             <button type="submit" class="btn btn-success  ">Guardar</button>
                             
                         </div>
@@ -122,6 +121,7 @@
                 }),
                 success: function(response) {
                     toasty.success(response.message);
+                    window.location.href = '/listUsers';
                 },
                 error: function(xhr, status, errorMessage) {
                     console.log('Error:', errorMessage);
