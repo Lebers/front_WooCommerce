@@ -165,7 +165,6 @@
             dataType: 'json',
             data: JSON.stringify({ "api_method": "menu_me","type_method":"GET" }),
             success: function(data) {
-               console.log("data",data);
                var firstUrl = null;
                 var menu_items = data.data;
                 var menu_html = '<li class="nav-item">';
@@ -186,7 +185,6 @@
                                         menu_html += ' </div>';
                                         menu_html += '</li>';
                 menu_items.forEach(function(item) {
-                    console.log("item",item);
                     menu_html += '<li class="nav-item">';
                     if(item.children){
                         // Si el elemento del menú tiene subelementos, construye un menú desplegable
