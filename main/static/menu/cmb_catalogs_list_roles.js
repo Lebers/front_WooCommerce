@@ -11,7 +11,7 @@ $('.cmb_perfil').select2({
         type: 'post',
         dataType: 'json',
         data: JSON.stringify({
-            "api_method": "catalogs/list_roles","type_method":"GET" 
+            "api_method": "catalogs/roles","type_method":"GET" 
             }), 
         processResults: function (response) {
         console.log(response);

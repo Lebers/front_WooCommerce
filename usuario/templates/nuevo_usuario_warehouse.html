@@ -101,13 +101,16 @@
             var profile_id  = document.getElementById('profile_id').value;
             var warehouse_id  = document.getElementById('warehouse_id').value;
             var username  = document.getElementById('username').value;
+            var selectElement = document.getElementById('profile_id');
+            var selectedText = selectElement.options[selectElement.selectedIndex].text;
+
             $.ajax({
                 url: '/api_proxy/',
                 type: 'POST',
                 contentType: 'application/json',
                 dataType: 'json',
                 data: JSON.stringify({
-                    "api_method": "user",
+                    "api_method": "user/"+selectedText,
                     "type_method": "POST",
                     "first_name": first_name,
                     "last_name": last_name,
